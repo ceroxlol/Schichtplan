@@ -1,4 +1,4 @@
-package schichtplanhgl.user
+package schichtplanhgl.model
 
 import io.ktor.server.auth.*
 import kotlinx.serialization.Serializable
