@@ -1,4 +1,3 @@
 package schichtplanhgl.controller.base
 
-abstract class BaseController {
-}
+abstract class BaseController

@@ -9,10 +9,9 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
-import io.ktor.util.*
 
-const val audience = "http://0.0.0.0:8080/hello"
-const val issuer = "http://0.0.0.0:8080/"
+//const val audience = "http://0.0.0.0:8080/hello"
+//const val issuer = "http://0.0.0.0:8080/"
 
 fun Application.configureSecurity() {
 
@@ -24,12 +23,13 @@ fun Application.configureSecurity() {
             verifier(
                 JWT
                     .require(Algorithm.HMAC256("secret"))
-                    .withAudience(audience)
-                    .withIssuer(issuer)
+                    //.withAudience(audience)
+                    //.withIssuer(issuer)
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(audience)) JWTPrincipal(credential.payload) else null
+                //if (credential.payload.audience.contains(audience)) JWTPrincipal(credential.payload) else null
+                null
             }
             challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")

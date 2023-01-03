@@ -20,6 +20,7 @@
     <repositories>
     </repositories>
     <dependencies>
+        <!-- KTOR -->
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-core-jvm</artifactId>
@@ -73,6 +74,11 @@
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-swagger</artifactId>
+            <version>${ktor_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-locations-jvm</artifactId>
             <version>${ktor_version}</version>
         </dependency>
         <dependency>
