@@ -1,5 +1,6 @@
 package schichtplanhgl.web.controllers
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -45,4 +46,15 @@ class UserController(private val userService: UserService) {
             }
         }
     }
+
+    suspend fun getAll(ctx: ApplicationCall) {
+        ctx.receive<List<UserDTO>>()
+    }
+
+    suspend fun activateUser(ctx: ApplicationCall) {
+        ctx.receive<Long>().apply {
+            userService.activateUser(this).also { ctx.respond(HttpStatusCode.OK) }
+        }
+    }
+
 }
