@@ -38,7 +38,7 @@ class UserController(private val userService: UserService) {
 
     suspend fun update(ctx: ApplicationCall) {
         val email = ctx.authentication.principal<User>()?.email
-        require(!email.isNullOrBlank()) { "User not logged." }
+        require(!email.isNullOrBlank()) { "User not logged in." }
         ctx.receive<UserDTO>().also { userDto ->
             userService.update(email, userDto.validToUpdate()).apply {
                 ctx.respond(UserDTO(this))

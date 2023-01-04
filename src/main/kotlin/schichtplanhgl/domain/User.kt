@@ -40,5 +40,6 @@ data class User(
     val token: String? = null,
     val username: String? = null,
     val password: String? = null,
-    val role: Role? = null
+    val role: Role? = null,
+    val activated: Boolean = false
 ) : Principal
