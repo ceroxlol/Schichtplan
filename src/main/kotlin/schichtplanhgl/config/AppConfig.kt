@@ -9,6 +9,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -24,13 +25,17 @@ const val SERVER_PORT = 8080
 
 fun setup(): BaseApplicationEngine {
     //DbConfig.setup("jdbc:h2:mem:DATABASE_TO_UPPER=false;", "sa", "")
-    DbConfig.setup("jdbc:h2:file:~/schichtplan/schichtplan/schichtplan;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=false;", "sa", "")
+    DbConfig.setup(
+        "jdbc:h2:file:~/schichtplan/schichtplan/schichtplan;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=false;",
+        "sa",
+        ""
+    )
     return server(Netty)
 }
 
 fun server(
     engine: ApplicationEngineFactory<BaseApplicationEngine,
-        out ApplicationEngine.Configuration>
+            out ApplicationEngine.Configuration>
 ): BaseApplicationEngine {
     return embeddedServer(
         engine,
@@ -45,7 +50,7 @@ fun Application.mainModule() {
 
     install(CallLogging)
     install(ContentNegotiation) {
-        jackson{}
+        jackson {}
     }
     install(Authentication) {
         jwt {
@@ -67,6 +72,16 @@ fun Application.mainModule() {
         }
     }
 
+    install(CORS) {
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Put)
+        allowMethod(HttpMethod.Delete)
+        allowMethod(HttpMethod.Patch)
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.AccessControlAllowOrigin)
+        allowHost("localhost:3000")
+    }
     install(Routing) {
         users(userController)
     }
