@@ -39,6 +39,8 @@ class UserService(private val jwtProvider: JwtProvider, private val userReposito
 
     fun getAll(): List<User> = userRepository.findAll()
 
+    fun activateUser(id: Long) = userRepository.activate(id)
+
     private fun generateJwtToken(user: User): String? {
         return jwtProvider.createJWT(user)
     }

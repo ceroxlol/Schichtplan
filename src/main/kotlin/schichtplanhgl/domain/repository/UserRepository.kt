@@ -73,7 +73,15 @@ class UserRepository {
         return findByEmail(user.email)
     }
 
-    fun findAll(): List<User>{
+    fun activate(id: Long) {
+        transaction {
+            Users.update({ Users.id eq id }) { row ->
+                row[activated] = true
+            }
+        }
+    }
+
+    fun findAll(): List<User> {
         return transaction {
             Users.selectAll().map { Users.toDomain(it) }
         }
