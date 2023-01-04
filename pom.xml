@@ -10,13 +10,14 @@
     <properties>
         <ktor_version>2.2.1</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.7.20</kotlin_version>
+        <kotlin_version>1.7.22</kotlin_version>
         <slf4j.version>2.0.6</slf4j.version>
         <serialization_version>1.4.1</serialization_version>
         <logback_version>1.4.5</logback_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>schichtplanhgl.ApplicationKt</main.class>
+        <kotlin.version>1.7.20</kotlin.version>
     </properties>
     <repositories>
     </repositories>
@@ -35,6 +36,16 @@
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-auth-jwt</artifactId>
+            <version>${ktor_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-auth-jvm</artifactId>
+            <version>${ktor_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-auth-jwt-jvm</artifactId>
             <version>${ktor_version}</version>
         </dependency>
         <dependency>
@@ -141,18 +152,6 @@
             <version>2.1.214</version>
         </dependency>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-tests-jvm</artifactId>
@@ -172,21 +171,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-auth-jvm</artifactId>
-            <version>2.2.1</version>
-            <scope>implementation</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-auth-jwt-jvm</artifactId>
-            <version>2.2.1</version>
-            <scope>implementation</scope>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
     </dependencies>
     <build>
-        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
@@ -197,7 +189,7 @@
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <version>${kotlin_version}</version>
+                <version>${kotlin.version}</version>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
                     <compilerPlugins>
@@ -271,6 +263,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>

@@ -23,7 +23,8 @@ const val SERVER_PORT = 8080
 
 
 fun setup(): BaseApplicationEngine {
-    DbConfig.setup("jdbc:h2:mem:DATABASE_TO_UPPER=false;", "sa", "")
+    //DbConfig.setup("jdbc:h2:mem:DATABASE_TO_UPPER=false;", "sa", "")
+    DbConfig.setup("jdbc:h2:file:~/schichtplan/schichtplan/schichtplan;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=false;", "sa", "")
     return server(Netty)
 }
 
