@@ -48,7 +48,7 @@ class UserController(private val userService: UserService) {
     }
 
     suspend fun getAll(ctx: ApplicationCall) {
-        ctx.receive<List<UserDTO>>()
+        ctx.respond(userService.getAll())
     }
 
     suspend fun activateUser(ctx: ApplicationCall) {

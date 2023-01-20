@@ -8,7 +8,7 @@ import schichtplanhgl.domain.User
 
 internal object Users : LongIdTable() {
     val email: Column<String> = varchar("email", 200).uniqueIndex()
-    val username: Column<String> = varchar("username", 100).uniqueIndex()
+    val username: Column<String> = varchar("username", 100)
     val password: Column<String> = varchar("password", 150)
     val role: Column<Role?> = enumerationByName("role", 50, Role::class).nullable()
     val activated: Column<Boolean> = bool("activated")

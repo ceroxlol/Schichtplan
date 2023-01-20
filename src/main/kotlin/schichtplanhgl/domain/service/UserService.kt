@@ -15,8 +15,8 @@ class UserService(private val jwtProvider: JwtProvider, private val userReposito
         userRepository.findByEmail(user.email).apply {
             require(this == null) { "Email already registered!" }
         }
-        userRepository.create(user.copy(password = String(base64Encoder.encode(Cipher.encrypt(user.password)))))
-        return user.copy(token = generateJwtToken(user))
+        val id = userRepository.create(user.copy(password = String(base64Encoder.encode(Cipher.encrypt(user.password)))))
+        return user.copy(id = id, token = generateJwtToken(user))
     }
 
     fun authenticate(user: User): User {

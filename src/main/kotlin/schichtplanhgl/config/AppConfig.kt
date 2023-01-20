@@ -15,6 +15,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.kodein.di.direct
 import org.kodein.di.instance
+import org.slf4j.event.Level
 import schichtplanhgl.utils.JwtProvider
 import schichtplanhgl.web.ErrorResponse
 import schichtplanhgl.web.controllers.UserController
@@ -48,7 +49,9 @@ fun server(
 fun Application.mainModule() {
     val userController = ModulesConfig.di.direct.instance<UserController>()
 
-    install(CallLogging)
+    install(CallLogging){
+        level = Level.ERROR
+    }
     install(ContentNegotiation) {
         jackson {}
     }
