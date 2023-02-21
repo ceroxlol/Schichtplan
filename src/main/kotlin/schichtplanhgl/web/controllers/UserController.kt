@@ -8,20 +8,25 @@ import io.ktor.server.response.*
 import schichtplanhgl.domain.User
 import schichtplanhgl.domain.UserDTO
 import schichtplanhgl.domain.service.UserService
+import schichtplanhgl.domain.toDto
 
 class UserController(private val userService: UserService) {
     suspend fun login(ctx: ApplicationCall) {
         ctx.receive<UserDTO>().apply {
-            userService.authenticate(this.validLogin()).apply {
-                ctx.respond(UserDTO(this))
+            if (this.validLogin()) {
+                ctx.respond(userService.authenticate(this).toDto())
+            } else {
+                ctx.respond(HttpStatusCode.Unauthorized, "Login invalid.")
             }
         }
     }
 
     suspend fun register(ctx: ApplicationCall) {
         ctx.receive<UserDTO>().apply {
-            userService.create(this.validRegister()).apply {
-                ctx.respond(UserDTO(this))
+            if(this.validRegister()){
+                ctx.respond(userService.create(this).toDto())
+            } else {
+                ctx.respond(HttpStatusCode.BadRequest, "Couldn't register user.")
             }
         }
     }
@@ -34,10 +39,10 @@ class UserController(private val userService: UserService) {
     }
 
     suspend fun getCurrent(ctx: ApplicationCall) {
-        ctx.respond(UserDTO(ctx.authentication.principal()))
+        ctx.respond(ctx.authentication.principal<User>()!!)
     }
 
-    suspend fun update(ctx: ApplicationCall) {
+/*    suspend fun update(ctx: ApplicationCall) {
         val email = ctx.authentication.principal<User>()?.email
         require(!email.isNullOrBlank()) { "User not logged in." }
         ctx.receive<UserDTO>().also { userDto ->
@@ -45,7 +50,7 @@ class UserController(private val userService: UserService) {
                 ctx.respond(UserDTO(this))
             }
         }
-    }
+    }*/
 
     suspend fun getAll(ctx: ApplicationCall) {
         ctx.respond(userService.getAll())

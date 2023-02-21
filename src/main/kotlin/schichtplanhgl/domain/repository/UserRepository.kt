@@ -10,7 +10,7 @@ internal object Users : LongIdTable() {
     val email: Column<String> = varchar("email", 200).uniqueIndex()
     val username: Column<String> = varchar("username", 100)
     val password: Column<String> = varchar("password", 150)
-    val role: Column<Role?> = enumerationByName("role", 50, Role::class).nullable()
+    val role: Column<Role> = enumerationByName("role", 50, Role::class).default(Role.MITARBEITER)
     val activated: Column<Boolean> = bool("activated")
 
     fun toDomain(row: ResultRow): User {
@@ -48,13 +48,33 @@ class UserRepository {
         }
     }
 
+    fun findById(id: Long): User?{
+        return transaction {
+            Users.select { Users.id eq id }
+                .map { Users.toDomain(it) }
+                .firstOrNull()
+        }
+    }
+
     fun create(user: User): Long {
         return transaction {
             Users.insertAndGetId { row ->
                 row[email] = user.email
-                row[username] = user.username!!
-                row[password] = user.password!!
+                row[username] = user.username
+                row[password] = user.password
                 row[activated] = user.activated
+            }.value
+        }
+    }
+
+    fun create(email: String, username: String, password: String, activated: Boolean, role: Role): Long {
+        return transaction {
+            Users.insertAndGetId { row ->
+                row[Users.email] = email
+                row[Users.username] = username
+                row[Users.password] = password
+                row[Users.activated] = activated
+                row[Users.role] = role
             }.value
         }
     }
@@ -63,12 +83,8 @@ class UserRepository {
         transaction {
             Users.update({ Users.email eq email }) { row ->
                 row[Users.email] = user.email
-                if (user.username != null) {
-                    row[username] = user.username
-                }
-                if (user.password != null) {
-                    row[password] = user.password
-                }
+                row[username] = user.username
+                row[password] = user.password
             }
         }
         return findByEmail(user.email)

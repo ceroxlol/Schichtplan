@@ -27,7 +27,7 @@ const val SERVER_PORT = 8080
 fun setup(): BaseApplicationEngine {
     //DbConfig.setup("jdbc:h2:mem:DATABASE_TO_UPPER=false;", "sa", "")
     DbConfig.setup(
-        "jdbc:h2:file:~/schichtplan/schichtplan/schichtplan;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=false;",
+        "jdbc:h2:file:~/Schichtplan/schichtplan-be/schichtplan_db;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=false;",
         "sa",
         ""
     )
@@ -53,7 +53,7 @@ fun Application.mainModule() {
         level = Level.ERROR
     }
     install(ContentNegotiation) {
-        jackson {}
+        jackson()
     }
     install(Authentication) {
         jwt {

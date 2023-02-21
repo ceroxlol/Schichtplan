@@ -18,12 +18,12 @@ object JwtProvider {
 
     fun decodeJWT(token: String): DecodedJWT = JWT.require(Cipher.algorithm).build().verify(token)
 
-    fun createJWT(user: User): String? =
+    fun createJWT(email: String): String =
         JWT.create()
             .withIssuedAt(Date())
             .withSubject("Authentication")
             .withIssuer(issuer)
             .withAudience(audience)
-            .withClaim("email", user.email)
+            .withClaim("email", email)
             .withExpiresAt(Date(System.currentTimeMillis() + validityInMs)).sign(Cipher.algorithm)
 }

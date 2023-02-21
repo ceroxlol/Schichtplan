@@ -15,7 +15,7 @@ fun Routing.users(userController: UserController) {
     route("user") {
         authenticate {
             get { userController.getCurrent(this.context) }
-            put { userController.update(this.context) }
+            //put { userController.update(this.context) }
             post("activate"){userController.activateUser(this.context)}
         }
     }

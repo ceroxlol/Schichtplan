@@ -1,5 +1,7 @@
 package schichtplanhgl.domain
 
 enum class Role {
-    HEIMLEITUNG
+    ADMIN,
+    HEIMLEITUNG,
+    MITARBEITER
 }
