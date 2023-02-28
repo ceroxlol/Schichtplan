@@ -18,7 +18,9 @@ import org.kodein.di.instance
 import org.slf4j.event.Level
 import schichtplanhgl.utils.JwtProvider
 import schichtplanhgl.web.ErrorResponse
+import schichtplanhgl.web.controllers.ShiftController
 import schichtplanhgl.web.controllers.UserController
+import schichtplanhgl.web.shifts
 import schichtplanhgl.web.users
 
 const val SERVER_PORT = 8080
@@ -48,6 +50,7 @@ fun server(
 
 fun Application.mainModule() {
     val userController = ModulesConfig.di.direct.instance<UserController>()
+    val shiftController = ModulesConfig.di.direct.instance<ShiftController>()
 
     install(CallLogging){
         level = Level.ERROR
@@ -87,5 +90,6 @@ fun Application.mainModule() {
     }
     install(Routing) {
         users(userController)
+        shifts(shiftController)
     }
 }

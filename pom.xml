@@ -10,18 +10,24 @@
     <properties>
         <ktor_version>2.2.1</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.7.22</kotlin_version>
+        <kotlin_version>1.7.20</kotlin_version>
         <slf4j.version>2.0.6</slf4j.version>
         <serialization_version>1.4.1</serialization_version>
         <logback_version>1.4.5</logback_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>schichtplanhgl.ApplicationKt</main.class>
-        <kotlin.version>1.7.20</kotlin.version>
+        <exposed_version>0.41.1</exposed_version>
+        <h2_version>2.1.214</h2_version>
+        <java_jwt>4.2.1</java_jwt>
+        <kotlinx_datetime_version>0.4.0</kotlinx_datetime_version>
+        <kodein_version>7.17.0</kodein_version>
+        <hikari_version>5.0.1</hikari_version>
     </properties>
     <repositories>
     </repositories>
     <dependencies>
+
         <!-- KTOR -->
         <dependency>
             <groupId>io.ktor</groupId>
@@ -46,21 +52,6 @@
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-auth-jwt-jvm</artifactId>
-            <version>${ktor_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>4.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-content-negotiation-jvm</artifactId>
-            <version>${ktor_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-serialization-jackson-jvm</artifactId>
             <version>${ktor_version}</version>
         </dependency>
         <dependency>
@@ -104,16 +95,41 @@
             <version>${ktor_version}</version>
         </dependency>
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>5.0.1</version>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-cors-jvm</artifactId>
+            <version>${ktor_version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-content-negotiation-jvm</artifactId>
+            <version>${ktor_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-serialization-jackson-jvm</artifactId>
+            <version>${ktor_version}</version>
+        </dependency>
+
+        <!--AUTH-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java_jwt}</version>
+        </dependency>
+
+        <!-- SERIALIZATION -->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-datetime-jvm</artifactId>
+            <version>${kotlinx_datetime_version}</version>
+        </dependency>
+
 
         <!-- DI -->
         <dependency>
             <groupId>org.kodein.di</groupId>
             <artifactId>kodein-di-jvm</artifactId>
-            <version>7.17.0</version>
+            <version>${kodein_version}</version>
         </dependency>
 
         <!-- Serialization -->
@@ -144,24 +160,36 @@
         <dependency>
             <groupId>org.jetbrains.exposed</groupId>
             <artifactId>exposed-core</artifactId>
-            <version>0.40.1</version>
+            <version>${exposed_version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.exposed</groupId>
             <artifactId>exposed-dao</artifactId>
-            <version>0.40.1</version>
+            <version>${exposed_version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.exposed</groupId>
             <artifactId>exposed-jdbc</artifactId>
-            <version>0.40.1</version>
+            <version>${exposed_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed-kotlin-datetime</artifactId>
+            <version>${exposed_version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.214</version>
+            <version>${h2_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari_version}</version>
         </dependency>
 
+
+        <!--TEST-->
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-tests-jvm</artifactId>
@@ -183,14 +211,9 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
+            <version>${kotlin_version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-cors-jvm</artifactId>
-            <version>2.2.1</version>
-            <scope>implementation</scope>
-        </dependency>
+
     </dependencies>
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
@@ -205,7 +228,7 @@
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <version>${kotlin.version}</version>
+                <version>${kotlin_version}</version>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
                     <compilerPlugins>
