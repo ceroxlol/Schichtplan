@@ -1,7 +1,8 @@
 package schichtplanhgl.config
 
 import io.ktor.http.*
-import io.ktor.serialization.jackson.*
+import io.ktor.serialization.kotlinx.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -13,6 +14,8 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.kodein.di.direct
 import org.kodein.di.instance
 import org.slf4j.event.Level
@@ -52,11 +55,15 @@ fun Application.mainModule() {
     val userController = ModulesConfig.di.direct.instance<UserController>()
     val shiftController = ModulesConfig.di.direct.instance<ShiftController>()
 
-    install(CallLogging){
-        level = Level.ERROR
+    install(CallLogging) {
+        level = Level.DEBUG
     }
     install(ContentNegotiation) {
-        jackson()
+        json(
+            Json {
+                prettyPrint = true
+            }
+        )
     }
     install(Authentication) {
         jwt {
@@ -66,6 +73,9 @@ fun Application.mainModule() {
                 if (credential.payload.audience.contains(JwtProvider.audience)) {
                     userController.getUserByEmail(credential.payload.claims["email"]?.asString())
                 } else null
+            }
+            challenge{_, _ ->
+                call.respond(HttpStatusCode.Unauthorized, "Credentials are not valid")
             }
         }
     }

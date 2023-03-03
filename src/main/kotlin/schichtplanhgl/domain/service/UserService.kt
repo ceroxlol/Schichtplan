@@ -7,7 +7,6 @@ import schichtplanhgl.domain.UserDTO
 import schichtplanhgl.domain.exceptions.NotFoundException
 import schichtplanhgl.domain.exceptions.UnauthorizedException
 import schichtplanhgl.domain.repository.UserRepository
-import schichtplanhgl.domain.toUser
 import schichtplanhgl.utils.Cipher
 import schichtplanhgl.utils.JwtProvider
 import java.util.*

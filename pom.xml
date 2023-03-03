@@ -106,7 +106,7 @@
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-serialization-jackson-jvm</artifactId>
+            <artifactId>ktor-serialization-kotlinx-json-jvm</artifactId>
             <version>${ktor_version}</version>
         </dependency>
 
@@ -123,20 +123,17 @@
             <artifactId>kotlinx-datetime-jvm</artifactId>
             <version>${kotlinx_datetime_version}</version>
         </dependency>
-
+<!--        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-json</artifactId>
+            <version>${serialization_version}</version>
+        </dependency>-->
 
         <!-- DI -->
         <dependency>
             <groupId>org.kodein.di</groupId>
             <artifactId>kodein-di-jvm</artifactId>
             <version>${kodein_version}</version>
-        </dependency>
-
-        <!-- Serialization -->
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-serialization-json</artifactId>
-            <version>${serialization_version}</version>
         </dependency>
 
         <!-- logging -->

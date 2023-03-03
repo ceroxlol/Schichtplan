@@ -1,22 +1,34 @@
 package schichtplanhgl.domain.repository
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Instant
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.transactions.transaction
 import schichtplanhgl.domain.Shift
+import schichtplanhgl.domain.ShiftWithUserName
 
 internal object Shifts : LongIdTable() {
-    val userId: Column<Long> = long("userId")/*.references(Users.id)*/
+    val userId: Column<Long> = long("userId").references(Users.id)
     val start = timestamp("shiftStart")
     val end = timestamp("shiftEnd")
 
     fun toDomain(row: ResultRow): Shift {
         return Shift(
-            userId = row[userId],
+            id = row[id].value,
             start = row[start],
-            end = row[end]
+            end = row[end],
+            userId = row[userId],
+        )
+    }
+
+    fun toShiftWithUserName(row: ResultRow): ShiftWithUserName{
+        return ShiftWithUserName(
+            id = row[id].value,
+            start = row[start],
+            end = row[end],
+            userId = row[userId],
+            userName = row[Users.username]
         )
     }
 }
@@ -25,26 +37,29 @@ class ShiftRepository {
     init {
         transaction {
             SchemaUtils.create(Shifts)
+            //TODO Debugging
+            Shifts.deleteAll()
         }
-        val start = Instant.parse("2023-02-28T06:39:17.300718573Z")
-        val end = Instant.parse("2023-02-28T11:39:17.300718573Z")
+        val start = Instant.fromEpochMilliseconds(1677754036000)
+        val end = Instant.fromEpochMilliseconds(1677775636000)
         createShift(Shift(
-            1,
-            start,
-            end
+            id = 1,
+            userId = 1,
+            start = start,
+            end = end
         ))
     }
 
-    fun getAll(): List<Shift>{
+    fun getAll(): List<ShiftWithUserName>{
         return transaction {
-            Shifts.selectAll().map { Shifts.toDomain(it) }
+            (Shifts innerJoin Users).selectAll().map { Shifts.toShiftWithUserName(it) }
         }
     }
 
-    fun findByUserId(userId: Long): List<Shift>{
+    fun findByUserId(userId: Long): List<ShiftWithUserName>{
         return transaction {
             Shifts.select { Shifts.userId eq userId }
-                .map { Shifts.toDomain(it) }
+                .map { Shifts.toShiftWithUserName(it) }
         }
     }
 
