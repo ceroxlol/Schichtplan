@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 class ShiftDto(
     val id: Long,
-    val group : Long,
+    val group: Long,
     val title: String,
     @SerialName("start_time") val start: Long,
     @SerialName("end_time") val end: Long
 )
 
-class Shift(
+open class Shift(
     val id: Long,
     val userId: Long,
     val start: Instant,
@@ -23,17 +23,28 @@ class Shift(
 )
 
 class ShiftWithUserName(
-    val id: Long,
-    val userId: Long,
-    val userName: String,
-    val start: Instant,
-    val end: Instant
-)
+    id: Long,
+    userId: Long,
+    start: Instant,
+    end: Instant,
+    val userName: String
+) : Shift(id, userId, start, end)
 
 fun ShiftWithUserName.toDto() = ShiftDto(
     id = id,
-    group = 1,
-    title = start.toLocalDateTime(TimeZone.UTC).hour.toString() + " - " + end.toLocalDateTime(TimeZone.UTC).hour.toString(),
+    group = userId,
+    title = createTitle(),
     start = start.toEpochMilliseconds(),
     end = end.toEpochMilliseconds()
 )
+
+fun Shift.toDto() = ShiftDto(
+    id = id,
+    group = userId,
+    title = createTitle(),
+    start = start.toEpochMilliseconds(),
+    end = end.toEpochMilliseconds()
+)
+
+private fun Shift.createTitle() =
+    start.toLocalDateTime(TimeZone.UTC).hour.toString() + " - " + end.toLocalDateTime(TimeZone.UTC).hour.toString()

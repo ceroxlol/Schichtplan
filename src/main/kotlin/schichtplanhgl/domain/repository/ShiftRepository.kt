@@ -56,10 +56,10 @@ class ShiftRepository {
         }
     }
 
-    fun findByUserId(userId: Long): List<ShiftWithUserName>{
+    fun findByUserId(userId: Long): List<Shift>{
         return transaction {
             Shifts.select { Shifts.userId eq userId }
-                .map { Shifts.toShiftWithUserName(it) }
+                .map { Shifts.toDomain(it) }
         }
     }
 

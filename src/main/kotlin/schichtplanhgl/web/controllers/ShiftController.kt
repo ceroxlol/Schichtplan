@@ -16,6 +16,6 @@ class ShiftController(
     }
 
     suspend fun getAll(ctx: ApplicationCall) {
-        ctx.respond(shiftService.getAll().map { it.toDto().also { ctx.application.log.info(it.start.toString()) } })
+        ctx.respond(shiftService.getAll().map { it.toDto()})
     }
 }
