@@ -30,6 +30,17 @@ class UserRepository {
         transaction {
             SchemaUtils.create(Users)
         }
+/*        val user = User(
+            id = 2,
+            email = "test1@test.de",
+            username = "Testuser1",
+            password = "Testpasswort",
+            role = Role.MITARBEITER
+        )
+        create(user)
+
+        create(user.copy(id = 3, email = "test2@test.de", username = "Testuser2"))
+        create(user.copy(id = 4, email = "test3@test.de", username = "Testuser3"))*/
     }
 
     fun findByEmail(email: String): User? {

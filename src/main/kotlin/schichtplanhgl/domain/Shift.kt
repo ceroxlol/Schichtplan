@@ -3,16 +3,15 @@ package schichtplanhgl.domain
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 class ShiftDto(
     val id: Long,
-    val group: Long,
+    val employeeId: Long,    //userId
     val title: String,
-    @SerialName("start_time") val start: Long,
-    @SerialName("end_time") val end: Long
+    val start: Instant,
+    val end: Instant
 )
 
 open class Shift(
@@ -32,18 +31,18 @@ class ShiftWithUserName(
 
 fun ShiftWithUserName.toDto() = ShiftDto(
     id = id,
-    group = userId,
+    employeeId = userId,
     title = createTitle(),
-    start = start.toEpochMilliseconds(),
-    end = end.toEpochMilliseconds()
+    start = start,
+    end = end
 )
 
 fun Shift.toDto() = ShiftDto(
     id = id,
-    group = userId,
+    employeeId = userId,
     title = createTitle(),
-    start = start.toEpochMilliseconds(),
-    end = end.toEpochMilliseconds()
+    start = start,
+    end = end
 )
 
 private fun Shift.createTitle() =

@@ -6,13 +6,13 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import schichtplanhgl.domain.User
-import schichtplanhgl.domain.UserDTO
+import schichtplanhgl.domain.UserDto
 import schichtplanhgl.domain.service.UserService
 import schichtplanhgl.domain.toDto
 
 class UserController(private val userService: UserService) {
     suspend fun login(ctx: ApplicationCall) {
-        ctx.receive<UserDTO>().apply {
+        ctx.receive<UserDto>().apply {
             if (this.validLogin()) {
                 ctx.respond(userService.authenticate(this).toDto())
             } else {
@@ -22,7 +22,7 @@ class UserController(private val userService: UserService) {
     }
 
     suspend fun register(ctx: ApplicationCall) {
-        ctx.receive<UserDTO>().apply {
+        ctx.receive<UserDto>().apply {
             if(this.validRegister()){
                 ctx.respond(userService.create(this).toDto())
             } else {
@@ -38,8 +38,15 @@ class UserController(private val userService: UserService) {
         }
     }
 
+    suspend fun getUserById(id: Long, ctx: ApplicationCall ) {
+        userService.getById(id)
+            .also {
+                ctx.respond(it.toDto() )
+            }
+    }
+
     suspend fun getCurrent(ctx: ApplicationCall) {
-        ctx.respond(ctx.authentication.principal<User>()!!)
+        ctx.respond(ctx.authentication.principal<User>()!!.toDto())
     }
 
 /*    suspend fun update(ctx: ApplicationCall) {
@@ -53,7 +60,7 @@ class UserController(private val userService: UserService) {
     }*/
 
     suspend fun getAll(ctx: ApplicationCall) {
-        ctx.respond(userService.getAll())
+        ctx.respond(userService.getAll().map { it.toDto() })
     }
 
     suspend fun activateUser(ctx: ApplicationCall) {

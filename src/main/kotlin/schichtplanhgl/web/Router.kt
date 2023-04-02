@@ -13,6 +13,7 @@ fun Routing.users(userController: UserController) {
         post("login") { userController.login(this.context) }
         authenticate {
             get("all") { userController.getAll(this.context) }
+            get("/{userId}") { userController.getUserById(call.parameters.getOrFail("userId").toLong(), this.context) }
         }
     }
     route("user") {

@@ -3,7 +3,7 @@ package schichtplanhgl.domain.service
 import io.ktor.server.engine.*
 import schichtplanhgl.domain.Role
 import schichtplanhgl.domain.User
-import schichtplanhgl.domain.UserDTO
+import schichtplanhgl.domain.UserDto
 import schichtplanhgl.domain.exceptions.NotFoundException
 import schichtplanhgl.domain.exceptions.UnauthorizedException
 import schichtplanhgl.domain.repository.UserRepository
@@ -14,7 +14,7 @@ import java.util.*
 class UserService(private val jwtProvider: JwtProvider, private val userRepository: UserRepository) {
     private val base64Encoder = Base64.getEncoder()
 
-    fun create(userDTO: UserDTO): User {
+    fun create(userDTO: UserDto): User {
         userRepository.findByEmail(userDTO.email)?.let { user ->
             applicationEngineEnvironment { log.warn("User with email ${userDTO.email} already exists.") }
             return user
@@ -34,7 +34,7 @@ class UserService(private val jwtProvider: JwtProvider, private val userReposito
         )
     }
 
-    fun authenticate(userDto: UserDTO): User {
+    fun authenticate(userDto: UserDto): User {
         val user = userRepository.findByEmail(userDto.email)
         if (user?.password == String(base64Encoder.encode(Cipher.encrypt(userDto.password)))) {
             return user.copy(token = generateJwtToken(userEmail = userDto.email))
@@ -42,10 +42,17 @@ class UserService(private val jwtProvider: JwtProvider, private val userReposito
         throw UnauthorizedException("email or password invalid!")
     }
 
+    //TODO: Make method with getAuthenticated user
     fun getByEmail(email: String): User {
         val user = userRepository.findByEmail(email)
         user ?: throw NotFoundException("User with email '$email' not found.")
         return user.copy(token = generateJwtToken(userEmail = user.email))
+    }
+
+    fun getById(id: Long): User {
+        val user = userRepository.findById(id)
+        user ?: throw NotFoundException("User with email '$id' not found.")
+        return user
     }
 
     fun update(email: String, user: User): User? {

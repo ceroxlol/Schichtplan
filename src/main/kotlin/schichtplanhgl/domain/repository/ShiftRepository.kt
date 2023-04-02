@@ -1,6 +1,8 @@
 package schichtplanhgl.domain.repository
 
-import kotlinx.datetime.Instant
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.plus
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
@@ -40,13 +42,25 @@ class ShiftRepository {
             //TODO Debugging
             Shifts.deleteAll()
         }
-        val start = Instant.fromEpochMilliseconds(1677754036000)
-        val end = Instant.fromEpochMilliseconds(1677775636000)
+        val start = Clock.System.now()
+        val end = Clock.System.now().plus(8, DateTimeUnit.HOUR)
         createShift(Shift(
             id = 1,
             userId = 1,
             start = start,
             end = end
+        ))
+        createShift(Shift(
+            id = 2,
+            userId = 2,
+            start = start,
+            end = end
+        ))
+        createShift(Shift(
+            id = 1,
+            userId = 1,
+            start = start.plus(24, DateTimeUnit.HOUR),
+            end = end.plus(24, DateTimeUnit.HOUR)
         ))
     }
 

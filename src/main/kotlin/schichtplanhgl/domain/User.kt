@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 import schichtplanhgl.ext.isEmailValid
 
 @Serializable
-data class UserDTO(
-    val userId: Long? = null,
+data class UserDto(
+    val id: Long? = null,
     val email: String,
     val token: String? = null,
     val username: String? = "",
@@ -32,8 +32,8 @@ data class User(
 ) : Principal
 
 
-fun User.toDto() = UserDTO(
-    userId = id,
+fun User.toDto() = UserDto(
+    id = this.id,
     email = this.email,
     token = this.token,
     username = this.username,
