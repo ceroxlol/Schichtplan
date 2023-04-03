@@ -1,7 +1,6 @@
 package schichtplanhgl.config
 
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -15,7 +14,6 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 import org.kodein.di.direct
 import org.kodein.di.instance
 import org.slf4j.event.Level
@@ -62,6 +60,7 @@ fun Application.mainModule() {
         json(
             Json {
                 prettyPrint = true
+                encodeDefaults = true
             }
         )
     }
