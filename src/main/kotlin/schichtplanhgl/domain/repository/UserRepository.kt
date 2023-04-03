@@ -90,12 +90,14 @@ class UserRepository {
         }
     }
 
-    fun update(email: String, user: User): User? {
+    fun update(user: User): User? {
         transaction {
-            Users.update({ Users.email eq email }) { row ->
-                row[Users.email] = user.email
+            Users.update({ Users.id eq user.id }) { row ->
+                row[email] = user.email
                 row[username] = user.username
                 row[password] = user.password
+                row[activated] = user.activated
+                row[role] = user.role
             }
         }
         return findByEmail(user.email)

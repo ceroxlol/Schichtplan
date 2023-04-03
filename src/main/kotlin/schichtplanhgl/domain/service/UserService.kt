@@ -55,8 +55,8 @@ class UserService(private val jwtProvider: JwtProvider, private val userReposito
         return user
     }
 
-    fun update(email: String, user: User): User? {
-        return userRepository.update(email, user)
+    fun update(user: User): User? {
+        return userRepository.update(user)
     }
 
     fun getAll(): List<User> = userRepository.findAll()

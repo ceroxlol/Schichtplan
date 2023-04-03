@@ -13,7 +13,8 @@ fun Routing.users(userController: UserController) {
         post("login") { userController.login(this.context) }
         authenticate {
             get("all") { userController.getAll(this.context) }
-            get("/{userId}") { userController.getUserById(call.parameters.getOrFail("userId").toLong(), this.context) }
+            get("{userId}") { userController.getUserById(call.parameters.getOrFail("userId").toLong(), this.context) }
+            post("{userId}") { userController.upsert(this.context)}
         }
     }
     route("user") {
@@ -29,7 +30,7 @@ fun Routing.shifts(shiftController: ShiftController) {
     route("shifts") {
         authenticate {
             get { shiftController.getAll(this.context) }
-            get("/{userId}") { shiftController.getShiftsByUserId(call.parameters.getOrFail("userId").toLong(), this.context) }
+            get("{userId}") { shiftController.getShiftsByUserId(call.parameters.getOrFail("userId").toLong(), this.context) }
         }
     }
 }

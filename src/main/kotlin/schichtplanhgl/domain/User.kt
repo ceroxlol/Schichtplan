@@ -18,7 +18,7 @@ data class UserDto(
 
     fun validLogin() = email.isEmailValid() && password.isNotBlank()
 
-    fun validUpToDate() = email.isEmailValid() && password.isNotBlank() && !username.isNullOrBlank()
+    fun valid() = email.isEmailValid() && password.isNotBlank() && !username.isNullOrBlank()
 }
 
 data class User(
@@ -40,4 +40,14 @@ fun User.toDto() = UserDto(
     password = this.password,
     role = this.role,
     activated = this.activated
+)
+
+fun UserDto.toUser() = User(
+    id = this.id!!,
+    email = email,
+    token = this.token,
+    username = this.username!!,
+    password = this.password,
+    role = this.role!!,
+    activated = this.activated!!
 )
