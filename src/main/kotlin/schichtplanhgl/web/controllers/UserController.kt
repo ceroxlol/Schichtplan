@@ -15,7 +15,7 @@ import schichtplanhgl.domain.toUser
 
 class UserController(private val userService: UserService) {
 
-    private val logger: Logger = LoggerFactory.getLogger("KtorApp")
+    private val logger: Logger = LoggerFactory.getLogger("UserController")
 
     suspend fun login(ctx: ApplicationCall) {
         ctx.receive<UserDto>().apply {
