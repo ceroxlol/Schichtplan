@@ -5,6 +5,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.transactions.transaction
 import schichtplanhgl.domain.Shift
@@ -20,7 +21,7 @@ internal object Shifts : LongIdTable() {
             id = row[id].value,
             start = row[start],
             end = row[end],
-            userId = row[userId],
+            employeeId = row[userId],
         )
     }
 
@@ -46,19 +47,19 @@ class ShiftRepository {
         val end = Clock.System.now().plus(8, DateTimeUnit.HOUR)
         createShift(Shift(
             id = 1,
-            userId = 1,
+            employeeId = 1,
             start = start,
             end = end
         ))
         createShift(Shift(
             id = 2,
-            userId = 2,
+            employeeId = 2,
             start = start,
             end = end
         ))
         createShift(Shift(
             id = 1,
-            userId = 1,
+            employeeId = 1,
             start = start.plus(24, DateTimeUnit.HOUR),
             end = end.plus(24, DateTimeUnit.HOUR)
         ))
@@ -80,10 +81,26 @@ class ShiftRepository {
     fun createShift(shift: Shift): Long {
         return transaction {
             Shifts.insertAndGetId { row ->
-                row[userId] = shift.userId
+                row[userId] = shift.employeeId
                 row[start] = shift.start
                 row[end] = shift.end
             }.value
+        }
+    }
+
+    fun updateShift(shift: Shift) {
+        return transaction{
+            Shifts.update ({ Shifts.id eq shift.id } ){ row ->
+                row[userId] = shift.employeeId
+                row[start] = shift.start
+                row[end] = shift.end
+            }
+        }
+    }
+
+    fun deleteShift(id: Long){
+        transaction {
+            Shifts.deleteWhere { Shifts.id eq id }
         }
     }
 }
