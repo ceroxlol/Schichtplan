@@ -226,7 +226,7 @@
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <version>1.8.21</version>
+                <version>1.7.0</version>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
                     <compilerPlugins>
