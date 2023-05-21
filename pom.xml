@@ -8,10 +8,11 @@
     <name>schichtplan</name>
     <description>schichtplan</description>
     <properties>
-        <ktor_version>2.2.1</ktor_version>
+        <ktor_version>2.3.0</ktor_version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin_version>1.7.20</kotlin_version>
-        <slf4j.version>2.0.6</slf4j.version>
+        <kotlin_version>1.8.21</kotlin_version>
+        <kotlin_plugin_version>1.7.0</kotlin_plugin_version>
+        <slf4j.version>2.0.7</slf4j.version>
         <serialization_version>1.4.1</serialization_version>
         <logback_version>1.4.5</logback_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,9 +20,9 @@
         <main.class>schichtplanhgl.ApplicationKt</main.class>
         <exposed_version>0.41.1</exposed_version>
         <h2_version>2.1.214</h2_version>
-        <java_jwt>4.2.1</java_jwt>
+        <java_jwt>4.4.0</java_jwt>
         <kotlinx_datetime_version>0.4.0</kotlinx_datetime_version>
-        <kodein_version>7.17.0</kodein_version>
+        <kodein_version>7.20.1</kodein_version>
         <hikari_version>5.0.1</hikari_version>
     </properties>
     <repositories>
@@ -202,7 +203,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-debug</artifactId>
-            <version>1.6.4</version>
+            <version>1.7.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -225,7 +226,7 @@
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <version>${kotlin_version}</version>
+                <version>1.8.21</version>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
                     <compilerPlugins>
