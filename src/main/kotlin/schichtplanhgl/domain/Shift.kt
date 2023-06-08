@@ -7,47 +7,33 @@ import kotlinx.serialization.Serializable
 class ShiftDto(
     val id: Long?,
     val employeeId: Long,    //userId
-    val title: String,
     val start: Instant,
-    val end: Instant
+    val end: Instant,
+    val type: ShiftTypeDto
 )
 
-open class Shift(
-    val id: Long?,
-    val employeeId: Long,
+class Shift(
+    val id: Long,
+    val userId: Long,
     val start: Instant,
-    val end: Instant
-)
-
-class ShiftWithUserName(
-    id: Long,
-    userId: Long,
-    start: Instant,
-    end: Instant,
-    val userName: String
-) : Shift(id, userId, start, end)
-
-fun ShiftWithUserName.toDto() = ShiftDto(
-    id = id,
-    employeeId = employeeId,
-    title = createTitle(),
-    start = start,
-    end = end
+    val end: Instant,
+    val type: ShiftType
 )
 
 fun Shift.toDto() = ShiftDto(
     id = id,
-    employeeId = employeeId,
-    title = createTitle(),
+    employeeId = userId,
     start = start,
-    end = end
+    end = end,
+    type = type.toDto()
 )
 
 fun ShiftDto.toShift() = Shift(
-    id = this.id,
-    employeeId = employeeId,
+    id = id ?: -1,
+    userId = employeeId,
     start = start,
-    end = end
+    end = end,
+    type = type.toShiftType()
 )
 
 private fun Shift.createTitle() = start.convertToHoursMinutes() + " - " + end.convertToHoursMinutes()
