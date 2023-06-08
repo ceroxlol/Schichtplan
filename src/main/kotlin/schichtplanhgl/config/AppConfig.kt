@@ -83,12 +83,12 @@ fun Application.mainModule() {
         exception<ContentTransformationException> { call, cause ->
             call.respond(HttpStatusCode.BadRequest, "Failed to parse request: ${cause.message}")
         }
-        exception(Exception::class.java) {
+/*        exception(Exception::class.java) {
             val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", this.toString())))
             context.respond(
                 HttpStatusCode.InternalServerError, errorResponse
             )
-        }
+        }*/
     }
 
     install(CORS) {
