@@ -1,5 +1,6 @@
 package schichtplanhgl.web.controllers
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -29,7 +30,7 @@ class ShiftController(
     suspend fun createShift(ctx: ApplicationCall) {
         ctx.receive<ShiftDto>().toShift().apply {
             ctx.respond(
-                if (this.id != null) {
+                if (this.id == (-1).toLong()) {
                     shiftService.updateShift(this)
                 } else {
                     shiftService.createShift(this)
@@ -40,5 +41,6 @@ class ShiftController(
 
     suspend fun deleteShift(shiftId: Long, ctx: ApplicationCall) {
         shiftService.deleteShift(shiftId)
+        ctx.respond(HttpStatusCode.OK)
     }
 }
