@@ -19,13 +19,12 @@ import org.kodein.di.direct
 import org.kodein.di.instance
 import org.slf4j.event.Level
 import schichtplanhgl.utils.JwtProvider
-import schichtplanhgl.web.ErrorResponse
 import schichtplanhgl.web.controllers.ShiftController
 import schichtplanhgl.web.controllers.UserController
 import schichtplanhgl.web.shifts
 import schichtplanhgl.web.users
 
-const val SERVER_PORT = 8080
+const val SERVER_PORT = "8080"
 
 
 fun setup(): BaseApplicationEngine {
@@ -44,7 +43,7 @@ fun server(
 ): BaseApplicationEngine {
     return embeddedServer(
         engine,
-        port = SERVER_PORT,
+        port = (System.getenv("PORT") ?: SERVER_PORT).toInt(),
         watchPaths = listOf("mainModule"),
         module = Application::mainModule
     )

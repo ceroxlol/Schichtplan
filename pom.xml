@@ -17,7 +17,7 @@
         <logback_version>1.4.5</logback_version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <main.class>schichtplanhgl.ApplicationKt</main.class>
+        <main.class>schichtplanhgl.Application</main.class>
         <exposed_version>0.41.1</exposed_version>
         <h2_version>2.1.214</h2_version>
         <java_jwt>4.4.0</java_jwt>
