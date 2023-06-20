@@ -5,6 +5,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import schichtplanhgl.domain.Role
 import schichtplanhgl.domain.User
+import schichtplanhgl.utils.Cipher
+import java.util.*
 
 internal object Users : LongIdTable() {
     val email: Column<String> = varchar("email", 200).uniqueIndex()
@@ -41,6 +43,19 @@ class UserRepository {
 
         create(user.copy(id = 3, email = "test2@test.de", username = "Testuser2"))
         create(user.copy(id = 4, email = "test3@test.de", username = "Testuser3"))*/
+        if(findByEmail("christopher.werner1@gmx.net") == null) {
+            create(
+                User(
+                    1,
+                    "christopher.werner1@gmx.net",
+                    null,
+                    username = "Christopher",
+                    String(Base64.getEncoder().encode(Cipher.encrypt("abc123"))),
+                    Role.ADMIN,
+                    true
+                )
+            )
+        }
     }
 
     fun findByEmail(email: String): User? {

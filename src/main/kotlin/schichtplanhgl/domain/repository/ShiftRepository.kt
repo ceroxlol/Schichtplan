@@ -1,8 +1,5 @@
 package schichtplanhgl.domain.repository
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.plus
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -10,7 +7,6 @@ import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.transactions.transaction
 import schichtplanhgl.domain.Shift
 import schichtplanhgl.domain.ShiftType
-import kotlin.reflect.typeOf
 
 internal object Shifts : LongIdTable() {
     val userId: Column<Long> = long("userId").references(Users.id)
@@ -34,7 +30,7 @@ class ShiftRepository {
         transaction {
             SchemaUtils.create(Shifts)
             //TODO Debugging
-            Shifts.deleteAll()
+            /*Shifts.deleteAll()
         }
         val start = Clock.System.now()
         val end = Clock.System.now().plus(8, DateTimeUnit.HOUR)
@@ -65,7 +61,8 @@ class ShiftRepository {
             start = start.plus(48, DateTimeUnit.HOUR),
             end = end.plus(48, DateTimeUnit.HOUR),
             type = ShiftType.VACATION
-        ))
+        ))*/
+        }
     }
 
     fun getAll(): List<Shift>{
