@@ -8,7 +8,7 @@ import schichtplanhgl.web.controllers.ShiftController
 import schichtplanhgl.web.controllers.UserController
 
 fun Routing.users(userController: UserController) {
-    route("users") {
+    route("api/users") {
         post("register") { userController.register(this.context) }
         post("login") { userController.login(this.context) }
         authenticate {
@@ -27,7 +27,7 @@ fun Routing.users(userController: UserController) {
 }
 
 fun Routing.shifts(shiftController: ShiftController) {
-    route("shifts") {
+    route("api/shifts") {
         authenticate {
             get { shiftController.getAll(this.context) }
             get("{userId}") { shiftController.getShiftsByUserId(call.parameters.getOrFail("userId").toLong(), this.context) }

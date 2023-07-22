@@ -10,7 +10,6 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -24,16 +23,15 @@ import schichtplanhgl.web.controllers.UserController
 import schichtplanhgl.web.shifts
 import schichtplanhgl.web.users
 
-const val SERVER_PORT = "8080"
-
-
 fun setup(): BaseApplicationEngine {
-    //DbConfig.setup("jdbc:h2:mem:DATABASE_TO_UPPER=false;", "sa", "")
-    DbConfig.setup(
-        "jdbc:h2:file:~/Schichtplan/db/schichtplan_db;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=false;",
-        "sa",
-        ""
-    )
+
+    val username = System.getenv("POSTGRES_USER") ?: "postgres"
+    val password = System.getenv("POSTGRES_PASSWORD") ?: "postgres"
+    val host = System.getenv("POSTGRES_HOST") ?: "localhost"
+    val port = System.getenv("POSTGRES_PORT") ?: "5432"
+    val jdbcUrl = "jdbc:postgresql://$host:$port/schichtplan?user=$username"
+    DbConfig.setup(jdbcUrl, username, password)
+
     return server(Netty)
 }
 
@@ -43,7 +41,7 @@ fun server(
 ): BaseApplicationEngine {
     return embeddedServer(
         engine,
-        port = (System.getenv("PORT") ?: SERVER_PORT).toInt(),
+        port = (System.getenv("PORT") ?: "8080").toInt(),
         watchPaths = listOf("mainModule"),
         module = Application::mainModule
     )
@@ -88,17 +86,6 @@ fun Application.mainModule() {
                 HttpStatusCode.InternalServerError, errorResponse
             )
         }*/
-    }
-
-    install(CORS) {
-        allowMethod(HttpMethod.Options)
-        allowMethod(HttpMethod.Put)
-        allowMethod(HttpMethod.Delete)
-        allowMethod(HttpMethod.Patch)
-        allowHeader(HttpHeaders.Authorization)
-        allowHeader(HttpHeaders.ContentType)
-        allowHeader(HttpHeaders.AccessControlAllowOrigin)
-        allowHost("localhost:3000")
     }
     install(Routing) {
         users(userController)

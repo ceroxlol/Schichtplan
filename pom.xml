@@ -18,11 +18,11 @@
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <main.class>schichtplanhgl.ApplicationKt</main.class>
         <exposed_version>0.41.1</exposed_version>
-        <h2_version>2.1.214</h2_version>
         <java_jwt>4.2.1</java_jwt>
         <kotlinx_datetime_version>0.4.0</kotlinx_datetime_version>
         <kodein_version>7.17.0</kodein_version>
         <hikari_version>5.0.1</hikari_version>
+        <postgresql_version>42.3.0</postgresql_version>
     </properties>
     <repositories>
     </repositories>
@@ -174,9 +174,9 @@
             <version>${exposed_version}</version>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2_version}</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql_version}</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
