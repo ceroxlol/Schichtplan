@@ -31,7 +31,7 @@ fun Routing.shifts(shiftController: ShiftController) {
         authenticate {
             get { shiftController.getAll(this.context) }
             get("{userId}") { shiftController.getShiftsByUserId(call.parameters.getOrFail("userId").toLong(), this.context) }
-            post { shiftController.createShift(this.context) }
+            post { shiftController.upsertShift(this.context) }
             delete("{shiftId}"){ shiftController.deleteShift(call.parameters.getOrFail("shiftId").toLong(), this.context) }
         }
     }

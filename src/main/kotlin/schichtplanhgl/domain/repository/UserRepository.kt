@@ -46,13 +46,13 @@ class UserRepository {
         if(findByEmail("christopher.werner1@gmx.net") == null) {
             create(
                 User(
-                    1,
-                    "christopher.werner1@gmx.net",
-                    null,
+                    id = 1,
+                    email = "christopher.werner1@gmx.net",
+                    token = null,
                     username = "Christopher",
-                    String(Base64.getEncoder().encode(Cipher.encrypt("abc123"))),
-                    Role.ADMIN,
-                    true
+                    password = String(Base64.getEncoder().encode(Cipher.encrypt("abc123"))),
+                    role = Role.ADMIN,
+                    activated = true
                 )
             )
         }

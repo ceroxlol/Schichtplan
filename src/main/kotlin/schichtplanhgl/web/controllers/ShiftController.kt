@@ -27,13 +27,13 @@ class ShiftController(
         ctx.respond(shiftService.getAll().map { it.toDto() })
     }
 
-    suspend fun createShift(ctx: ApplicationCall) {
+    suspend fun upsertShift(ctx: ApplicationCall) {
         ctx.receive<ShiftDto>().toShift().apply {
             ctx.respond(
                 if (this.id == (-1).toLong()) {
-                    shiftService.updateShift(this)
-                } else {
                     shiftService.createShift(this)
+                } else {
+                    shiftService.updateShift(this)
                 }
             )
         }

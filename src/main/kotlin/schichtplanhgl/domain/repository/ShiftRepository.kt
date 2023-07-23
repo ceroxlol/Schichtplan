@@ -89,7 +89,7 @@ class ShiftRepository {
         }
     }
 
-    fun updateShift(shift: Shift) {
+    fun updateShift(shift: Shift): Long {
         return transaction{
             Shifts.update ({ Shifts.id eq shift.id } ){ row ->
                 row[userId] = shift.userId
@@ -97,6 +97,7 @@ class ShiftRepository {
                 row[end] = shift.end
                 row[type] = shift.type
             }
+            shift.id
         }
     }
 

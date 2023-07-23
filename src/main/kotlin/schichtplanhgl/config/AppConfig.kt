@@ -97,7 +97,7 @@ fun Application.mainModule() {
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.AccessControlAllowOrigin)
-        allowHost("localhost:3000")
+        anyHost()
     }
     install(Routing) {
         users(userController)

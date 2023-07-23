@@ -25,7 +25,7 @@ class UserController(private val userService: UserService) {
                 try {
                     ctx.respond(userService.authenticate(this).toDto())
                 } catch (e: UnauthorizedException) {
-                    ctx.respond(HttpStatusCode.Unauthorized, "Credentials invalid.")
+                    ctx.respond(HttpStatusCode.Unauthorized, "Credentials invalid.") // TODO that's not the right status code
                 }
             } else {
                 ctx.respond(HttpStatusCode.BadRequest, "Missing credentials.")
