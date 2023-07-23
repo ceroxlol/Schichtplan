@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import schichtplanhgl.domain.User
 import schichtplanhgl.domain.UserDto
+import schichtplanhgl.domain.exceptions.UnauthorizedException
 import schichtplanhgl.domain.service.UserService
 import schichtplanhgl.domain.toDto
 import schichtplanhgl.domain.toUser
@@ -19,10 +20,15 @@ class UserController(private val userService: UserService) {
 
     suspend fun login(ctx: ApplicationCall) {
         ctx.receive<UserDto>().apply {
+            // TODO Beautify this
             if (this.validLogin()) {
-                ctx.respond(userService.authenticate(this).toDto())
+                try {
+                    ctx.respond(userService.authenticate(this).toDto())
+                } catch (e: UnauthorizedException) {
+                    ctx.respond(HttpStatusCode.Unauthorized, "Credentials invalid.")
+                }
             } else {
-                ctx.respond(HttpStatusCode.Unauthorized, "Login invalid.")
+                ctx.respond(HttpStatusCode.BadRequest, "Missing credentials.")
             }
         }
     }
