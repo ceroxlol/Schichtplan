@@ -5,8 +5,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.transactions.transaction
-import schichtplanhgl.domain.Shift
-import schichtplanhgl.domain.ShiftType
+import schichtplanhgl.domain.model.Shift
+import schichtplanhgl.domain.model.ShiftType
 
 internal object Shifts : LongIdTable() {
     val userId: Column<Long> = long("userId").references(Users.id)

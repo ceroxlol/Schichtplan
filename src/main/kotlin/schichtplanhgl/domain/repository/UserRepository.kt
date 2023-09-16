@@ -3,9 +3,11 @@ package schichtplanhgl.domain.repository
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import schichtplanhgl.domain.Role
-import schichtplanhgl.domain.User
+import schichtplanhgl.domain.model.Role
+import schichtplanhgl.domain.model.User
 import schichtplanhgl.utils.Cipher
+import schichtplanhgl.utils.PasswordGenerator.generateRandomPassword
+import java.io.File
 import java.util.*
 
 internal object Users : LongIdTable() {
@@ -17,7 +19,7 @@ internal object Users : LongIdTable() {
 
     fun toDomain(row: ResultRow): User {
         return User(
-            id = row[Users.id].value,
+            id = row[id].value,
             email = row[email],
             username = row[username],
             password = row[password],
@@ -28,9 +30,13 @@ internal object Users : LongIdTable() {
 }
 
 class UserRepository {
+
+    private val adminEmail = System.getenv("ADMIN_EMAIL") ?: "christopher.werner1@gmx.net"
+
     init {
         transaction {
             SchemaUtils.create(Users)
+
         }
 /*        val user = User(
             id = 2,
@@ -43,32 +49,24 @@ class UserRepository {
 
         create(user.copy(id = 3, email = "test2@test.de", username = "Testuser2"))
         create(user.copy(id = 4, email = "test3@test.de", username = "Testuser3"))*/
-        if(findByEmail("christopher.werner1@gmx.net") == null) {
+/*        if(findByEmail("christopher.werner1@gmx.net") == null) {
             create(
                 User(
                     id = 1,
                     email = "christopher.werner1@gmx.net",
-                    token = null,
                     username = "Christopher",
                     password = String(Base64.getEncoder().encode(Cipher.encrypt("abc123"))),
                     role = Role.ADMIN,
                     activated = true
                 )
             )
-        }
+        }*/
+        createDefaultAdminUser()
     }
 
     fun findByEmail(email: String): User? {
         return transaction {
             Users.select { Users.email eq email }
-                .map { Users.toDomain(it) }
-                .firstOrNull()
-        }
-    }
-
-    fun findByUsername(username: String): User? {
-        return transaction {
-            Users.select { Users.username eq username }
                 .map { Users.toDomain(it) }
                 .firstOrNull()
         }
@@ -128,7 +126,27 @@ class UserRepository {
 
     fun findAll(): List<User> {
         return transaction {
-            Users.selectAll().map { Users.toDomain(it) }
+            Users.selectAll().map { Users.toDomain(it) }.filter { it.role != Role.ADMIN }
+        }
+    }
+
+    private fun createDefaultAdminUser() {
+        if (findByEmail(adminEmail) == null) {
+            val randomPassword = generateRandomPassword(20)
+            create(
+                User(
+                    id = 1,
+                    email = "",
+                    username = "Christopher Werner",
+                    password = String(Base64.getEncoder().encode(Cipher.encrypt(randomPassword))),
+                    role = Role.ADMIN,
+                    activated = true
+                )
+            )
+
+            val file = File("admin.txt")
+            file.writeText("$adminEmail\n$randomPassword")
+            println("Admin password: $randomPassword")
         }
     }
 }

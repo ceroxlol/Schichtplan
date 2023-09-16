@@ -1,4 +1,4 @@
-package schichtplanhgl.domain
+package schichtplanhgl.domain.model
 
 enum class ShiftType {
     DEFAULT,

@@ -1,4 +1,4 @@
-package schichtplanhgl.domain
+package schichtplanhgl.domain.model
 
 import io.ktor.server.auth.*
 import kotlinx.serialization.Serializable
@@ -8,7 +8,6 @@ import schichtplanhgl.ext.isEmailValid
 data class UserDto(
     val id: Long? = null,
     val email: String,
-    val token: String? = null,
     val username: String? = "",
     val password: String,
     val role: Role? = Role.MITARBEITER,
@@ -16,15 +15,12 @@ data class UserDto(
 ) {
     fun validRegister() = email.isEmailValid() && password.isNotBlank() && !username.isNullOrBlank()
 
-    fun validLogin() = email.isEmailValid() && password.isNotBlank()
-
     fun valid() = email.isEmailValid() && password.isNotBlank() && !username.isNullOrBlank()
 }
 
 data class User(
     val id: Long,
     val email: String,
-    val token: String? = null,
     val username: String,
     val password: String,
     val role: Role,
@@ -35,7 +31,6 @@ data class User(
 fun User.toDto() = UserDto(
     id = this.id,
     email = this.email,
-    token = this.token,
     username = this.username,
     password = this.password,
     role = this.role,
@@ -45,7 +40,6 @@ fun User.toDto() = UserDto(
 fun UserDto.toUser() = User(
     id = this.id!!,
     email = email,
-    token = this.token,
     username = this.username!!,
     password = this.password,
     role = this.role!!,

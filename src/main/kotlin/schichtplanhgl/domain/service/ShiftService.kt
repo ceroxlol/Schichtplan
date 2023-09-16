@@ -1,6 +1,6 @@
 package schichtplanhgl.domain.service
 
-import schichtplanhgl.domain.Shift
+import schichtplanhgl.domain.model.Shift
 import schichtplanhgl.domain.repository.ShiftRepository
 
 class ShiftService(
@@ -13,7 +13,7 @@ class ShiftService(
 
     fun createShift(shift: Shift) = shiftRepository.createShift(shift)
 
-    fun updateShift(shift:Shift) = shiftRepository.updateShift(shift)
+    fun updateShift(shift: Shift) = shiftRepository.updateShift(shift)
 
     fun deleteShift(id: Long) = shiftRepository.deleteShift(id)
 }

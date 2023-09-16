@@ -7,7 +7,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.server.plugins.*
+import io.ktor.server.plugins.ContentTransformationException
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
@@ -19,6 +19,8 @@ import org.kodein.di.direct
 import org.kodein.di.instance
 import org.slf4j.event.Level
 import schichtplanhgl.utils.JwtProvider
+import schichtplanhgl.utils.JwtProvider.validateCredentialsAdmin
+import schichtplanhgl.utils.JwtProvider.validateCredentialsUser
 import schichtplanhgl.web.controllers.ShiftController
 import schichtplanhgl.web.controllers.UserController
 import schichtplanhgl.web.shifts
@@ -49,11 +51,13 @@ fun server(
 }
 
 fun Application.mainModule() {
+
     val userController = ModulesConfig.di.direct.instance<UserController>()
     val shiftController = ModulesConfig.di.direct.instance<ShiftController>()
 
     install(CallLogging) {
-        level = Level.DEBUG
+        level = Level.INFO
+        format { "%date% %method% %uri% %status% %latency%" }
     }
     install(ContentNegotiation) {
         json(
@@ -64,16 +68,24 @@ fun Application.mainModule() {
         )
     }
     install(Authentication) {
-        jwt {
-            verifier(JwtProvider.verifier)
-            authSchemes("Token")
+        jwt("user") {
+            realm = JwtProvider.userRealm
+            verifier(JwtProvider.getVerifier())
             validate { credential ->
-                if (credential.payload.audience.contains(JwtProvider.audience)) {
-                    userController.getUserByEmail(credential.payload.claims["email"]?.asString())
-                } else null
+                validateCredentialsUser(credential)
             }
-            challenge{_, _ ->
+            challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "Credentials are not valid")
+            }
+        }
+        jwt("admin") {
+            realm = JwtProvider.adminRealm
+            verifier(JwtProvider.getVerifier())
+            validate { credential ->
+                validateCredentialsAdmin(credential)
+            }
+            challenge { _, _ ->
+                call.respond(HttpStatusCode.Unauthorized, "Credentials are not valid for admin access")
             }
         }
     }
@@ -81,12 +93,12 @@ fun Application.mainModule() {
         exception<ContentTransformationException> { call, cause ->
             call.respond(HttpStatusCode.BadRequest, "Failed to parse request: ${cause.message}")
         }
-/*        exception(Exception::class.java) {
-            val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", this.toString())))
-            context.respond(
-                HttpStatusCode.InternalServerError, errorResponse
-            )
-        }*/
+        /*        exception(Exception::class.java) {
+                    val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", this.toString())))
+                    context.respond(
+                        HttpStatusCode.InternalServerError, errorResponse
+                    )
+                }*/
     }
     // for local development
     install(CORS) {

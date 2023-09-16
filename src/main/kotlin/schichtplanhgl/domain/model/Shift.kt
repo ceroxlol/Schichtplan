@@ -1,4 +1,4 @@
-package schichtplanhgl.domain
+package schichtplanhgl.domain.model
 
 import kotlinx.datetime.*
 import kotlinx.serialization.Serializable

@@ -6,10 +6,10 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import schichtplanhgl.domain.ShiftDto
+import schichtplanhgl.domain.model.ShiftDto
 import schichtplanhgl.domain.service.ShiftService
-import schichtplanhgl.domain.toDto
-import schichtplanhgl.domain.toShift
+import schichtplanhgl.domain.model.toDto
+import schichtplanhgl.domain.model.toShift
 
 class ShiftController(
     private val shiftService: ShiftService
